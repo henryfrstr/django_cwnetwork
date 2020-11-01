@@ -1,0 +1,23 @@
+body {
+    background: #f8f8f8 !important;
+}
+
+.nav {
+    border-radius: 0px !important;
+    padding: 8px 0 8px 0 !important;
+    background-color: #1E90FF !important;
+}
+
+.mb-7{
+    margin-bottom: 7px !important;
+}
+.cw{
+    background-color: #FF00FF !important;
+}
+
+.mymodal{
+    height: 300px !important;
+    top: 200px !important;
+    font-size: 15px !important;
+    margin-top: 5px !important;
+}

@@ -17,7 +17,7 @@ class Profile(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return f"{self.user.username}-{self.created}"
+        return f"{self.user.username}-{self.created.strftime('%d-%m-%Y')}"
     
     def save(self, *args, **kwargs):
         ex =False
@@ -31,7 +31,48 @@ class Profile(models.Model):
             to_slug = str(self.user)
         self.slug = to_slug
         super().save(*args, **kwargs)
-                
+    
+    @property
+    def get_friend(self):
+        return self.friends.all()
+    
+    def get_friend_num(self):
+        return self.friends.count()
+    
+    def get_posts_num(self):
+        return self.posts.all().count()
+    
+    def get_all_authors_posts(self):
+        return self.posts.all()
+    
+    def get_likes_given_num(self):
+        likes = self.like_set.all()
+        total_liked = 0
+        for like in likes:
+            if like.value == 'Like':
+                total_liked += 1
+        return total_liked
+    
+    def get_likes_received_num(self):
+        posts = self.posts.all()
+        total_liked = 0
+        for post in posts:
+            total_liked += post.liked.all().count()
+        return total_liked
+
+STATUS_CHOICES = (
+    ('send', 'send'),
+    ('accepted', 'accepted')
+)
             
 class Relationship(models.Model):
-    pass
+    sender = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="sender")
+    receiver = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="receiver")
+    status  =models.CharField(max_length=8, choices=STATUS_CHOICES)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)    
+    
+    def __str__(self):
+        return f"{self.sender}-{self.receiver}-{self.status}"
+    
+
